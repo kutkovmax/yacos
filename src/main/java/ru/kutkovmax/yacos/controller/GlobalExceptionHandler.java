@@ -1,6 +1,7 @@
 package ru.kutkovmax.yacos.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,6 +50,16 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleNoResource(NoResourceFoundException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Resource not found: " + ex.getResourcePath());
         problem.setTitle("Not Found");
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ProblemDetail handleInvalidDataAccess(InvalidDataAccessApiUsageException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                "Invalid sort parameter or query expression"
+        );
+        problem.setTitle("Invalid Request Parameter");
         return problem;
     }
 }
