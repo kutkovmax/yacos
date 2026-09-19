@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-yacos}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "${POSTGRES_PORT:-3333}:5432"
+      - "${POSTGRES_PORT:-127.0.0.1:3333}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -18,6 +18,7 @@ services:
       retries: 5
 
   app:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-kutkovmax}/yacos:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -32,6 +33,10 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
       JAVA_TOOL_OPTIONS: "-Xms64m -Xmx192m -XX:+UseSerialGC -XX:MaxMetaspaceSize=128m"
+    deploy:
+      resources:
+        limits:
+          memory: 450M
     ports:
       - "127.0.0.1:${APP_PORT:-8080}:8080"
 
