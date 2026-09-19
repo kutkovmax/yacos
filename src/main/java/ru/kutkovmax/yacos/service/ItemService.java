@@ -47,10 +47,17 @@ public class ItemService {
         return toResponse(repository.save(item));
     }
 
+
     @Transactional
     public ItemResponse update(Long id, UpdateItemRequest req) {
         Item item = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Item with id " + id + " not found"));
+
+        if (!item.getVersion().equals(req.version())) {
+            throw new org.springframework.dao.OptimisticLockingFailureException(
+                    "Item was updated by another transaction. Expected version: " + item.getVersion() + ", got: " + req.version()
+            );
+        }
 
         item.updateDetails(
                 req.name().trim(),
@@ -78,6 +85,7 @@ public class ItemService {
                 item.getName(),
                 item.getQuantity(),
                 item.getPrice(),
+                item.getVersion(),
                 item.getCreatedAt()
         );
     }

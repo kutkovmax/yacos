@@ -15,7 +15,10 @@ public record UpdateItemRequest(
 
         @NotNull(message = "Price is required")
         @Positive(message = "Price must be greater than 0")
-        BigDecimal price
+        BigDecimal price,
+
+        @NotNull(message = "Version is required for optimistic locking")
+        Long version
 
 ) {
 }

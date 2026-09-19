@@ -27,6 +27,10 @@ public class Item {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     protected Item() {}
 
     public Item(String sku, String name, Integer quantity, BigDecimal price){
@@ -43,6 +47,7 @@ public class Item {
     public Integer getQuantity(){return quantity;}
     public BigDecimal getPrice(){return price;}
     public Instant getCreatedAt(){return createdAt;}
+    public Long getVersion(){return version;}
 
     public void updateDetails(String name, Integer quantity, BigDecimal price){
         this.name = name;

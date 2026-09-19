@@ -9,6 +9,7 @@ public record ItemResponse(
         String name,
         Integer quantity,
         BigDecimal price,
+        Long version,
         Instant createdAt
 ) {
 }

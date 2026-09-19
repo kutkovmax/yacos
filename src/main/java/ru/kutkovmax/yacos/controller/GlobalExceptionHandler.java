@@ -2,6 +2,7 @@ package ru.kutkovmax.yacos.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -60,6 +61,16 @@ public class GlobalExceptionHandler {
                 "Invalid sort parameter or query expression"
         );
         problem.setTitle("Invalid Request Parameter");
+        return problem;
+    }
+
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    public ProblemDetail handleOptimisticLockingFailure(OptimisticLockingFailureException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Concurrent Modification Conflict");
         return problem;
     }
 }
