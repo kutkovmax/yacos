@@ -2,14 +2,38 @@ services:
   postgres:
     image: postgres:17
     container_name: yacos-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: yacos
-      POSTGRES_USER: yacos
-      POSTGRES_PASSWORD: yacos
+      POSTGRES_DB: ${POSTGRES_DB:-yacos}
+      POSTGRES_USER: ${POSTGRES_USER:-yacos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "3333:5432"
+      - "${POSTGRES_PORT:-3333}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-yacos} -d ${POSTGRES_DB:-yacos}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yacos-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-yacos}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-yacos}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx192m -XX:+UseSerialGC -XX:MaxMetaspaceSize=128m"
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
 
 volumes:
-  postgres_data:
+  pgdata:
