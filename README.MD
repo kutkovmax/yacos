@@ -5,10 +5,16 @@
 ## Демо
 
 **Swagger UI:**
-[https://kutkovmax.ru/yacos/swagger-ui/index.html](https://kutkovmax.ru/yacos/swagger-ui/index.html)
+~~[https://kutkovmax.ru/yacos/swagger-ui/index.html](https://kutkovmax.ru/yacos/swagger-ui/index.html)~~
 
 **OpenAPI:**
-[https://kutkovmax.ru/yacos/api-docs](https://kutkovmax.ru/yacos/api-docs)
+~~[https://kutkovmax.ru/yacos/api-docs](https://kutkovmax.ru/yacos/api-docs)~~
+
+Публичное демо закрыто: серверные ресурсы перераспределены в пользу других проектов.
+
+Сохранённые копии документации: [OpenAPI](https://web.archive.org/web/20260923082932/https://kutkovmax.ru/yacos/api-docs) и [Swagger UI](https://web.archive.org/web/20260923082929/https://kutkovmax.ru/yacos/swagger-ui/index.html)
+
+*Примечание: сохранённая в Web Archive версия Swagger UI иногда может отображаться некорректно из-за особенностей воспроизведения API-запросов архивом.*
 
 ## Стек
 
